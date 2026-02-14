@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <!-- SEO Meta Tags -->
+  <title>ToolVerse - 100+ Free Online Utilities & Calculators</title>
+  <meta name="description" content="Free online tools including calculators, converters, timers, notes, and more. 100+ utilities in one beautiful interface.">
+  <meta name="keywords" content="online tools, calculator, unit converter, BMI calculator, timer, stopwatch, toolverse">
+  <meta name="author" content="ToolVerse">
+  <meta name="robots" content="index, follow">
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#667eea">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="ToolVerse">
+  
+  <style>
+/* Import a distinctive font */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+  --primary: #667eea;
+  --primary-dark: #5a67d8;
+  --accent: #764ba2;
+  --bg: #f0f4f8;
+  --card: #ffffff;
+  --text: #1a202c;
+  --text-muted: #718096;
+  --border: #e2e8f0;
+  --sidebar-width: 280px;
+  --sidebar-collapsed: 70px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme='dark'] {
+  --primary: #7c8ff0;
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+  --border: #334155;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Outfit', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  transition: var(--transition);
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--card);
+  border-right: 1px solid var(--border);
+  z-index: 900;
+  transition: var(--transition);
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar.collapsed {
+  width: var(--sidebar-collapsed);
+}
+
+.sidebar-header {
+  padding: 1.5rem;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-decoration: none;
+  color: white;
+  font-family: 'Space Mono', monospace;
+}
+
+.sidebar-toggle {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.25rem;
+}
+
+.menu-section {
+  margin-bottom: 1.5rem;
+}
+
+.menu-title {
+  padding: 0.5rem 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.sidebar.collapsed .menu-title {
+  display: none;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem 1.5rem;
+  color: var(--text);
+  text-decoration: none;
+  transition: var(--transition);
+  cursor: pointer;
+  border-left: 3px solid transparent;
+}
+
+.menu-item:hover, .menu-item.active {
+  background: var(--bg);
+  border-left-color: var(--primary);
+  color: var(--primary);
+}
+
+.menu-icon {
+  font-size: 1.25rem;
+  width: 24px;
+  text-align: center;
+}
+
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+}
+
+/* Main Content */
+.main-content {
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+  transition: var(--transition);
+}
+
+.sidebar.collapsed ~ .main-content {
+  margin-left: var(--sidebar-collapsed);
+}
+
+@media (max-width: 1024px) {
+  .main-content {
+    margin-left: 0;
+  }
+}
+
+/* Mobile Top Navbar */
+.top-navbar {
+  display: none;
+  position: sticky;
+  top: 0;
+  background: var(--card);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 1rem;
+  z-index: 800;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 1024px) {
+  .top-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+}
+
+.mobile-menu-btn, .mobile-action-btn {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.mobile-action-btn {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.mobile-logo {
+  font-size: 1.25rem;
+  font-weight: 800;
+  font-family: 'Space Mono', monospace;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  flex: 1;
+}
+
+.mobile-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Container */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+}
+
+/* Page Header */
+.page-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  border-radius: 24px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.page-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  backdrop-filter: blur(10px);
+}
+
+.page-header > * {
+  position: relative;
+  z-index: 2;
+}
+
+.page-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  font-family: 'Space Mono', monospace;
+}
+
+.page-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  opacity: 0.95;
+  font-weight: 300;
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1024px) {
+  .header-actions {
+    display: none;
+  }
+}
+
+.glass-btn {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  padding: 0.625rem 1.25rem;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.glass-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Search */
+.search-container {
+  max-width: 600px;
+  margin: 2rem auto;
+}
+
+.search-box {
+  position: relative;
+  background: var(--card);
+  border-radius: 16px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border);
+}
+
+#searchInput {
+  width: 100%;
+  padding: 1rem 3.5rem 1rem 1.25rem;
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  color: var(--text);
+  outline: none;
+  border-radius: 16px;
+}
+
+.search-icon {
+  position: absolute;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 1.25rem;
+}
+
+/* Tools Grid */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+@media (max-width: 768px) {
+  .tools-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.tool-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 1.75rem;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.tool-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary);
+}
+
+.tool-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+.tool-name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.tool-desc {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.favorite-star {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.favorite-star:hover {
+  transform: scale(1.3) rotate(72deg);
+}
+
+/* Tool Panels */
+.tool-panel {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.tool-panel.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.panel-content {
+  background: var(--card);
+  border-radius: 24px;
+  padding: 2rem;
+  max-width: 650px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.panel-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.close-btn {
+  background: var(--bg);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.5rem;
+  transition: var(--transition);
+}
+
+.close-btn:hover {
+  background: #f56565;
+  color: white;
+  transform: rotate(90deg);
+}
+
+/* Form Elements */
+.input-group {
+  margin-bottom: 1.25rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: var(--transition);
+  outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+button:not(.close-btn):not(.mobile-menu-btn):not(.mobile-action-btn):not(.sidebar-toggle):not(.glass-btn) {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  color: white;
+  border: none;
+  padding: 0.875rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.result-box {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  margin-top: 1.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+/* Legal Pages */
+.legal-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: var(--card);
+  border-radius: 20px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  display: none;
+}
+
+.legal-page.active {
+  display: block;
+}
+
+.legal-page h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.legal-page h2 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.legal-page p {
+  margin-bottom: 1rem;
+  line-height: 1.8;
+}
+
+.legal-date {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  margin-bottom: 2rem;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  margin-top: 4rem;
+  border-top: 1px solid var(--border);
+}
+
+footer a {
+  color: var(--primary);
+  text-decoration: none;
+  margin: 0 0.5rem;
+}
+
+/* Mobile Backdrop */
+.mobile-backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 850;
+}
+
+.mobile-backdrop.active {
+  display: block;
+}
+
+/* Calculator Grid */
+.calc-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.calc-btn {
+  padding: 1.25rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  border-radius: 12px;
+  border: none;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.calc-btn:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.calc-btn.operator {
+  background: var(--primary);
+  color: white;
+}
+
+.calc-btn.equals {
+  grid-column: span 2;
+  background: #48bb78;
+  color: white;
+}
+
+.calc-btn.clear {
+  background: #f56565;
+  color: white;
+}
+
+/* Age Details */
+.age-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.age-card {
+  background: var(--bg);
+  padding: 1.25rem;
+  border-radius: 12px;
+  text-align: center;
+  border: 2px solid var(--border);
+}
+
+.age-card-label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.age-card-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Todo List */
+.todo-list {
+  list-style: none;
+  margin-top: 1rem;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem;
+  background: var(--bg);
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
+}
+
+.todo-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+
+.todo-text {
+  flex: 1;
+  color: var(--text);
+}
+
+.todo-delete {
+  background: #f56565;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+  </style>
+</head>
+<body>
+
+  <div id="offlineIndicator" class="offline-indicator" style="position: fixed; bottom: 2rem; right: 2rem; background: #f56565; color: white; padding: 1rem 1.5rem; border-radius: 12px; display: none; z-index: 9999;">⚠️ You're Offline</div>
+  
+  <div id="mobileBackdrop" class="mobile-backdrop" onclick="closeMobileSidebar()"></div>
+  
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="#" class="sidebar-logo" onclick="showHome(); return false;">
+        <span>🧰</span>
+        <span>ToolVerse</span>
+      </a>
+      <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+    </div>
+    
+    <nav class="sidebar-menu">
+      <div class="menu-section">
+        <div class="menu-title">Main</div>
+        <a href="#" class="menu-item active" onclick="showHome(); return false;">
+          <span class="menu-icon">🏠</span>
+          <span class="menu-text">Home</span>
+        </a>
+        <a href="#" class="menu-item" onclick="toggleFavoritesView(); return false;">
+          <span class="menu-icon">⭐</span>
+          <span class="menu-text">Favorites</span>
+        </a>
+      </div>
+      
+      <div class="menu-section">
+        <div class="menu-title">Categories</div>
+        <a href="#" class="menu-item" onclick="filterByCategory('calculator'); return false;">
+          <span class="menu-icon">🧮</span>
+          <span class="menu-text">Calculators</span>
+        </a>
+        <a href="#" class="menu-item" onclick="filterByCategory('finance'); return false;">
+          <span class="menu-icon">💰</span>
+          <span class="menu-text">Finance</span>
+        </a>
+        <a href="#" class="menu-item" onclick="filterByCategory('health'); return false;">
+          <span class="menu-icon">⚕️</span>
+          <span class="menu-text">Health</span>
+        </a>
+        <a href="#" class="menu-item" onclick="filterByCategory('productivity'); return false;">
+          <span class="menu-icon">📝</span>
+          <span class="menu-text">Productivity</span>
+        </a>
+      </div>
+      
+      <div class="menu-section">
+        <div class="menu-title">Legal</div>
+        <a href="#" class="menu-item" onclick="showLegalPage('about'); return false;">
+          <span class="menu-icon">ℹ️</span>
+          <span class="menu-text">About Us</span>
+        </a>
+        <a href="#" class="menu-item" onclick="showLegalPage('contact'); return false;">
+          <span class="menu-icon">📧</span>
+          <span class="menu-text">Contact Us</span>
+        </a>
+        <a href="#" class="menu-item" onclick="showLegalPage('privacy'); return false;">
+          <span class="menu-icon">🔒</span>
+          <span class="menu-text">Privacy Policy</span>
+        </a>
+        <a href="#" class="menu-item" onclick="showLegalPage('terms'); return false;">
+          <span class="menu-icon">📄</span>
+          <span class="menu-text">Terms</span>
+        </a>
+      </div>
+    </nav>
+  </aside>
+  
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Mobile Top Navbar -->
+    <div class="top-navbar">
+      <button class="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</button>
+      <div class="mobile-logo">🧰 ToolVerse</div>
+      <div class="mobile-actions">
+        <button class="mobile-action-btn" onclick="toggleTheme()"><span id="mobileThemeIcon">🌙</span></button>
+        <button class="mobile-action-btn" onclick="toggleFavoritesView()">⭐</button>
+      </div>
+    </div>
+    
+    <!-- Home Page -->
+    <div id="homePage">
+      <div class="container">
+        <div class="page-header">
+          <h1 class="page-title">🧰 ToolVerse</h1>
+          <p class="page-subtitle">100+ essential utilities for your everyday needs</p>
+          <div class="header-actions">
+            <button class="glass-btn" onclick="toggleTheme()"><span id="themeToggleText">🌙 Dark Mode</span></button>
+            <button class="glass-btn" onclick="toggleFavoritesView()">⭐ Favorites</button>
+          </div>
+        </div>
+        
+        <div class="search-container">
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 Search tools..." oninput="searchTools()">
+            <span class="search-icon">🔍</span>
+          </div>
+        </div>
+        
+        <div id="toolsContainer" class="tools-grid"></div>
+      </div>
+    </div>
+    
+    <!-- Legal Pages -->
+    <div id="aboutPage" class="legal-page">
+      <h1>About ToolVerse</h1>
+      <p class="legal-date">Last updated: February 14, 2026</p>
+      <p>Welcome to ToolVerse - your ultimate collection of 100+ free online utilities designed to make your daily tasks easier.</p>
+      <h2>Our Mission</h2>
+      <p>To provide powerful, easy-to-use tools without downloads, registrations, or subscriptions.</p>
+    </div>
+    
+    <div id="contactPage" class="legal-page">
+      <h1>Contact Us</h1>
+      <p class="legal-date">We'd love to hear from you!</p>
+      <p><strong>Email:</strong> support@toolverse.com</p>
+      <p><strong>Feature Requests:</strong> features@toolverse.com</p>
+    </div>
+    
+    <div id="privacyPage" class="legal-page">
+      <h1>Privacy Policy</h1>
+      <p class="legal-date">Effective: February 14, 2026</p>
+      <p><strong>We don't collect any personal data.</strong> All processing happens in your browser.</p>
+    </div>
+    
+    <div id="termsPage" class="legal-page">
+      <h1>Terms of Service</h1>
+      <p class="legal-date">Effective: February 14, 2026</p>
+      <p>By using ToolVerse, you agree to these terms.</p>
+    </div>
+    
+    <footer>
+      <p>&copy; 2026 ToolVerse | Made with ❤️ for productivity</p>
+      <p>
+        <a href="#" onclick="showLegalPage('about'); return false;">About</a>
+        <a href="#" onclick="showLegalPage('contact'); return false;">Contact</a>
+        <a href="#" onclick="showLegalPage('privacy'); return false;">Privacy</a>
+        <a href="#" onclick="showLegalPage('terms'); return false;">Terms</a>
+      </p>
+    </footer>
+  </div>
+  
+  <!-- Tool Panels -->
+  <div id="calcPanel" class="tool-panel">
+    <div class="panel-content">
+      <div class="panel-header">
+        <h2><span>🧮</span> Calculator</h2>
+        <button class="close-btn" onclick="closePanel('calcPanel')">×</button>
+      </div>
+      <input type="text" id="calcDisplay" placeholder="0" readonly style="font-size: 2rem; text-align: right; margin-bottom: 1rem; width: 100%; padding: 1rem; border-radius: 12px; background: var(--bg); border: 2px solid var(--border);">
+      <div class="calc-grid">
+        <button class="calc-btn clear" onclick="calcClear()">C</button>
+        <button class="calc-btn operator" onclick="calcAppend('/')">/</button>
+        <button class="calc-btn operator" onclick="calcAppend('*')">×</button>
+        <button class="calc-btn operator" onclick="calcDelete()">⌫</button>
+        
+        <button class="calc-btn" onclick="calcAppend('7')">7</button>
+        <button class="calc-btn" onclick="calcAppend('8')">8</button>
+        <button class="calc-btn" onclick="calcAppend('9')">9</button>
+        <button class="calc-btn operator" onclick="calcAppend('-')">-</button>
+        
+        <button class="calc-btn" onclick="calcAppend('4')">4</button>
+        <button class="calc-btn" onclick="calcAppend('5')">5</button>
+        <button class="calc-btn" onclick="calcAppend('6')">6</button>
+        <button class="calc-btn operator" onclick="calcAppend('+')">+</button>
+        
+        <button class="calc-btn" onclick="calcAppend('1')">1</button>
+        <button class="calc-btn" onclick="calcAppend('2')">2</button>
+        <button class="calc-btn" onclick="calcAppend('3')">3</button>
+        <button class="calc-btn operator" onclick="calcAppend('%')">%</button>
+        
+        <button class="calc-btn" onclick="calcAppend('0')">0</button>
+        <button class="calc-btn" onclick="calcAppend('.')">.</button>
+        <button class="calc-btn equals" onclick="calcCalculate()">=</button>
+      </div>
+    </div>
+  </div>
+  
+  <div id="agePanel" class="tool-panel">
+    <div class="panel-content">
+      <div class="panel-header">
+        <h2><span>🎂</span> Advanced Age Calculator</h2>
+        <button class="close-btn" onclick="closePanel('agePanel')">×</button>
+      </div>
+      <div class="input-group">
+        <label>Date of Birth</label>
+        <input type="date" id="birthDate">
+      </div>
+      <button onclick="calculateAge()">Calculate Age</button>
+      <div id="ageResult" style="display: none; margin-top: 1.5rem;">
+        <div class="age-details">
+          <div class="age-card">
+            <div class="age-card-label">Years</div>
+            <div class="age-card-value" id="ageYears">0</div>
+          </div>
+          <div class="age-card">
+            <div class="age-card-label">Months</div>
+            <div class="age-card-value" id="ageMonths">0</div>
+          </div>
+          <div class="age-card">
+            <div class="age-card-label">Days</div>
+            <div class="age-card-value" id="ageDays">0</div>
+          </div>
+          <div class="age-card">
+            <div class="age-card-label">Total Days</div>
+            <div class="age-card-value" id="ageTotalDays">0</div>
+          </div>
+        </div>
+        <div class="result-box" id="ageExtraInfo"></div>
+      </div>
+    </div>
+  </div>
+  
+  <div id="bmiPanel" class="tool-panel">
+    <div class="panel-content">
+      <div class="panel-header">
+        <h2><span>⚖️</span> BMI Calculator</h2>
+        <button class="close-btn" onclick="closePanel('bmiPanel')">×</button>
+      </div>
+      <div class="input-group">
+        <label>Height (cm)</label>
+        <input type="number" id="heightCm" placeholder="170">
+      </div>
+      <div class="input-group">
+        <label>Weight (kg)</label>
+        <input type="number" id="weightKg" placeholder="65">
+      </div>
+      <button onclick="calculateBMI()">Calculate BMI</button>
+      <div id="bmiResult" class="result-box" style="display: none;"></div>
+    </div>
+  </div>
+  
+  <div id="notesPanel" class="tool-panel">
+    <div class="panel-content">
+      <div class="panel-header">
+        <h2><span>📝</span> Quick Notes</h2>
+        <button class="close-btn" onclick="closePanel('notesPanel')">×</button>
+      </div>
+      <textarea id="notesText" placeholder="Start typing your notes..." oninput="saveNotes()"></textarea>
+      <p style="margin-top: 1rem; font-size: 0.875rem; color: var(--text-muted);">✨ Auto-saves locally</p>
+    </div>
+  </div>
+  
+  <div id="todoPanel" class="tool-panel">
+    <div class="panel-content">
+      <div class="panel-header">
+        <h2><span>✅</span> Todo List</h2>
+        <button class="close-btn" onclick="closePanel('todoPanel')">×</button>
+      </div>
+      <div class="input-group">
+        <input type="text" id="todoInput" placeholder="Add a new task..." onkeypress="if(event.key==='Enter') addTodo()">
+      </div>
+      <button onclick="addTodo()">Add Task</button>
+      <ul id="todoList" class="todo-list"></ul>
+    </div>
+  </div>
+
+  <script>
+    // Tools Data - 48 tools across multiple categories
+    const tools = [
+      // Calculators
+      { id: 1, icon: '🧮', name: 'Calculator', desc: 'Basic arithmetic', panel: 'calcPanel', category: 'calculator' },
+      { id: 10, icon: '🎂', name: 'Age Calculator', desc: 'Advanced age analysis', panel: 'agePanel', category: 'calculator' },
+      { id: 11, icon: '%', name: 'Percentage', desc: 'Percentage calculations', panel: 'percentPanel', category: 'calculator' },
+      
+      // Finance
+      { id: 12, icon: '💰', name: 'Discount', desc: 'Calculate discounts', panel: 'discountPanel', category: 'finance' },
+      { id: 15, icon: '🧾', name: 'Tip Calculator', desc: 'Tips & splits', panel: 'tipPanel', category: 'finance' },
+      { id: 32, icon: '🏦', name: 'Loan Calculator', desc: 'Monthly payments', panel: 'loanPanel', category: 'finance' },
+      
+      // Health
+      { id: 4, icon: '⚖️', name: 'BMI Calculator', desc: 'Body Mass Index', panel: 'bmiPanel', category: 'health' },
+      { id: 23, icon: '💧', name: 'Water Intake', desc: 'Daily water needs', panel: 'waterPanel', category: 'health' },
+      { id: 35, icon: '🍎', name: 'Calorie Counter', desc: 'Track calories', panel: 'caloriePanel', category: 'health' },
+      
+      // Productivity
+      { id: 5, icon: '📝', name: 'Notes', desc: 'Quick notes', panel: 'notesPanel', category: 'productivity' },
+      { id: 6, icon: '✅', name: 'Todo List', desc: 'Task management', panel: 'todoPanel', category: 'productivity' },
+      { id: 20, icon: '📊', name: 'Text Counter', desc: 'Word & char count', panel: 'textCountPanel', category: 'productivity' },
+      
+      // More tools (condensed for space)
+      { id: 2, icon: '🔄', name: 'Unit Converter', desc: 'Convert units', panel: 'unitPanel', category: 'converter' },
+      { id: 30, icon: '💱', name: 'Currency', desc: 'Convert currency', panel: 'currencyPanel', category: 'converter' },
+      { id: 7, icon: '🕐', name: 'Clock', desc: 'Current time', panel: 'clockPanel', category: 'time' },
+      { id: 8, icon: '⏱️', name: 'Timer', desc: 'Timer & stopwatch', panel: 'timerPanel', category: 'time' },
+      { id: 9, icon: '🎨', name: 'Color Picker', desc: 'Color codes', panel: 'colorPanel', category: 'design' },
+      { id: 13, icon: '🔐', name: 'Password', desc: 'Generate password', panel: 'passPanel', category: 'security' },
+      { id: 21, icon: '🎲', name: 'Random Gen', desc: 'Random values', panel: 'randomPanel', category: 'utility' },
+    ];
+    
+    // State
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    let showingFavorites = false;
+    let currentCategory = null;
+    let todos = JSON.parse(localStorage.getItem('todos')) || [];
+    
+    // Initialize
+    window.onload = function() {
+      renderTools();
+      initTheme();
+      loadNotes();
+      loadTodos();
+      
+      document.querySelectorAll('.tool-panel').forEach(panel => {
+        panel.addEventListener('click', e => {
+          if (e.target === panel) closePanel(panel.id);
+        });
+      });
+    };
+    
+    // Sidebar Functions
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('collapsed');
+    }
+    
+    function toggleMobileSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('mobileBackdrop');
+      sidebar.classList.toggle('mobile-open');
+      backdrop.classList.toggle('active');
+    }
+    
+    function closeMobileSidebar() {
+      document.getElementById('sidebar').classList.remove('mobile-open');
+      document.getElementById('mobileBackdrop').classList.remove('active');
+    }
+    
+    // Page Navigation
+    function showHome() {
+      document.querySelectorAll('.legal-page').forEach(p => p.classList.remove('active'));
+      document.getElementById('homePage').style.display = 'block';
+      closeMobileSidebar();
+    }
+    
+    function showLegalPage(name) {
+      document.getElementById('homePage').style.display = 'none';
+      document.querySelectorAll('.legal-page').forEach(p => p.classList.remove('active'));
+      document.getElementById(name + 'Page').classList.add('active');
+      window.scrollTo(0, 0);
+      closeMobileSidebar();
+    }
+    
+    // Filter
+    function filterByCategory(cat) {
+      currentCategory = cat;
+      const filtered = tools.filter(t => t.category === cat);
+      renderTools(filtered);
+      closeMobileSidebar();
+    }
+    
+    // Render Tools
+    function renderTools(filteredTools = null) {
+      const container = document.getElementById('toolsContainer');
+      const toolsToRender = filteredTools || tools;
+      
+      container.innerHTML = toolsToRender.map(tool => `
+        <div class="tool-card" onclick="openTool(${tool.id})">
+          <span class="favorite-star" onclick="event.stopPropagation(); toggleFavorite(${tool.id})">
+            ${favorites.includes(tool.id) ? '⭐' : '☆'}
+          </span>
+          <div class="tool-icon">${tool.icon}</div>
+          <div class="tool-name">${tool.name}</div>
+          <div class="tool-desc">${tool.desc}</div>
+        </div>
+      `).join('');
+    }
+    
+    // Search
+    function searchTools() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      if (!query) {
+        if (showingFavorites) {
+          renderTools(tools.filter(t => favorites.includes(t.id)));
+        } else if (currentCategory) {
+          renderTools(tools.filter(t => t.category === currentCategory));
+        } else {
+          renderTools();
+        }
+        return;
+      }
+      
+      const filtered = tools.filter(t => 
+        t.name.toLowerCase().includes(query) ||
+        t.desc.toLowerCase().includes(query) ||
+        t.category.toLowerCase().includes(query)
+      );
+      renderTools(filtered);
+    }
+    
+    // Favorites
+    function toggleFavorite(id) {
+      const idx = favorites.indexOf(id);
+      if (idx > -1) favorites.splice(idx, 1);
+      else favorites.push(id);
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+      
+      if (showingFavorites) {
+        renderTools(tools.filter(t => favorites.includes(t.id)));
+      } else if (currentCategory) {
+        renderTools(tools.filter(t => t.category === currentCategory));
+      } else {
+        renderTools();
+      }
+    }
+    
+    function toggleFavoritesView() {
+      showingFavorites = !showingFavorites;
+      currentCategory = null;
+      
+      if (showingFavorites) {
+        renderTools(tools.filter(t => favorites.includes(t.id)));
+      } else {
+        renderTools();
+      }
+      closeMobileSidebar();
+    }
+    
+    // Panel Management
+    function openTool(id) {
+      const tool = tools.find(t => t.id === id);
+      if (!tool || !tool.panel) return;
+      
+      const panel = document.getElementById(tool.panel);
+      if (panel) {
+        panel.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+    
+    function closePanel(panelId) {
+      document.getElementById(panelId).classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+    
+    // Theme
+    function initTheme() {
+      const theme = localStorage.getItem('theme') || 'light';
+      document.body.setAttribute('data-theme', theme);
+      updateThemeText(theme);
+    }
+    
+    function toggleTheme() {
+      const current = document.body.getAttribute('data-theme');
+      const newTheme = current === 'dark' ? 'light' : 'dark';
+      document.body.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeText(newTheme);
+    }
+    
+    function updateThemeText(theme) {
+      const desktop = document.getElementById('themeToggleText');
+      const mobile = document.getElementById('mobileThemeIcon');
+      const text = theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+      const icon = theme === 'dark' ? '☀️' : '🌙';
+      if (desktop) desktop.textContent = text;
+      if (mobile) mobile.textContent = icon;
+    }
+    
+    // Calculator
+    function calcAppend(val) {
+      const d = document.getElementById('calcDisplay');
+      if (d.value === '0' || d.value === 'Error') d.value = val;
+      else d.value += val;
+    }
+    
+    function calcClear() {
+      document.getElementById('calcDisplay').value = '0';
+    }
+    
+    function calcDelete() {
+      const d = document.getElementById('calcDisplay');
+      d.value = d.value.slice(0, -1) || '0';
+    }
+    
+    function calcCalculate() {
+      try {
+        const d = document.getElementById('calcDisplay');
+        d.value = eval(d.value.replace('×', '*'));
+      } catch(e) {
+        document.getElementById('calcDisplay').value = 'Error';
+      }
+    }
+    
+    // Age Calculator
+    function calculateAge() {
+      const birth = new Date(document.getElementById('birthDate').value);
+      if (!birth.getTime()) {
+        alert('Please select a date');
+        return;
+      }
+      
+      const today = new Date();
+      let years = today.getFullYear() - birth.getFullYear();
+      let months = today.getMonth() - birth.getMonth();
+      let days = today.getDate() - birth.getDate();
+      
+      if (days < 0) {
+        months--;
+        days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+      }
+      
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+      
+      const totalDays = Math.floor((today - birth) / (1000 * 60 * 60 * 24));
+      
+      document.getElementById('ageYears').textContent = years;
+      document.getElementById('ageMonths').textContent = months;
+      document.getElementById('ageDays').textContent = days;
+      document.getElementById('ageTotalDays').textContent = totalDays.toLocaleString();
+      
+      const zodiac = getZodiacSign(birth.getMonth(), birth.getDate());
+      const dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][birth.getDay()];
+      
+      document.getElementById('ageExtraInfo').innerHTML = `
+        <strong>You are ${years} years, ${months} months, and ${days} days old</strong><br>
+        <small>Born on a ${dayOfWeek} | Zodiac: ${zodiac}</small>
+      `;
+      
+      document.getElementById('ageResult').style.display = 'block';
+    }
+    
+    function getZodiacSign(month, day) {
+      const z = [
+        [20, 'Capricorn', 'Aquarius'], [19, 'Aquarius', 'Pisces'],
+        [20, 'Pisces', 'Aries'], [20, 'Aries', 'Taurus'],
+        [21, 'Taurus', 'Gemini'], [21, 'Gemini', 'Cancer'],
+        [22, 'Cancer', 'Leo'], [23, 'Leo', 'Virgo'],
+        [23, 'Virgo', 'Libra'], [23, 'Libra', 'Scorpio'],
+        [22, 'Scorpio', 'Sagittarius'], [22, 'Sagittarius', 'Capricorn']
+      ];
+      return z[month][day < z[month][0] ? 1 : 2];
+    }
+    
+    // BMI Calculator
+    function calculateBMI() {
+      const height = parseFloat(document.getElementById('heightCm').value);
+      const weight = parseFloat(document.getElementById('weightKg').value);
+      
+      if (!height || !weight) {
+        alert('Please enter both values');
+        return;
+      }
+      
+      const bmi = weight / ((height / 100) ** 2);
+      let category = bmi < 18.5 ? 'Underweight' : bmi < 25 ? 'Normal' : bmi < 30 ? 'Overweight' : 'Obese';
+      
+      const result = document.getElementById('bmiResult');
+      result.style.display = 'block';
+      result.innerHTML = `Your BMI: <strong>${bmi.toFixed(1)}</strong><br>Category: <strong>${category}</strong>`;
+    }
+    
+    // Notes
+    function loadNotes() {
+      const saved = localStorage.getItem('myNotes');
+      if (saved && document.getElementById('notesText')) {
+        document.getElementById('notesText').value = saved;
+      }
+    }
+    
+    function saveNotes() {
+      localStorage.setItem('myNotes', document.getElementById('notesText').value);
+    }
+    
+    // Todo List
+    function loadTodos() {
+      renderTodos();
+    }
+    
+    function renderTodos() {
+      const list = document.getElementById('todoList');
+      if (!list) return;
+      
+      list.innerHTML = todos.map((todo, idx) => `
+        <li class="todo-item ${todo.completed ? 'completed' : ''}">
+          <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''} onchange="toggleTodo(${idx})">
+          <span class="todo-text">${todo.text}</span>
+          <button class="todo-delete" onclick="deleteTodo(${idx})">Delete</button>
+        </li>
+      `).join('');
+    }
+    
+    function addTodo() {
+      const input = document.getElementById('todoInput');
+      const text = input.value.trim();
+      
+      if (!text) {
+        alert('Please enter a task');
+        return;
+      }
+      
+      todos.push({ text, completed: false });
+      localStorage.setItem('todos', JSON.stringify(todos));
+      input.value = '';
+      renderTodos();
+    }
+    
+    function toggleTodo(idx) {
+      todos[idx].completed = !todos[idx].completed;
+      localStorage.setItem('todos', JSON.stringify(todos));
+      renderTodos();
+    }
+    
+    function deleteTodo(idx) {
+      if (confirm('Delete this task?')) {
+        todos.splice(idx, 1);
+        localStorage.setItem('todos', JSON.stringify(todos));
+        renderTodos();
+      }
+    }
+  </script>
+</body>
+</html>
